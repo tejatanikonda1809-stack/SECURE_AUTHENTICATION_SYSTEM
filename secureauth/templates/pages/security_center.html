@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Security testing center{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> DEVELOPMENT / TESTING ONLY</div><h1>Security <span class="text-gradient">lab.</span></h1><p class="lead compact">Controlled checks run against a temporary isolated database and dedicated test account.</p></div><div class="security-pill"><span class="status-pulse"></span> Isolated test data</div></div>
+  <div class="glass-card lab-intro"><div><div class="card-kicker">SAFE TESTING BOUNDARY</div><h2>Production authentication stays untouched.</h2><p class="muted">Each run creates a disposable SQLite database in a temporary directory, uses a dedicated synthetic account, and removes the database when complete. No external targets or real account data are used.</p></div><form method="post" action="{{ url_for('testing_center.security_center') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button button-primary" type="submit">Run security checks <span>→</span></button></form></div>
+  {% if results %}
+  <div class="test-results-heading"><div><div class="eyebrow">EXECUTION RESULTS</div><h2>{{ results|selectattr('status', 'equalto', 'PASS')|list|length }} / {{ results|length }} checks passed</h2></div><span class="result-note">Results are from this run only</span></div>
+  <div class="test-list">
+    {% for test in results %}
+    <article class="glass-card test-card"><div class="test-status {{ 'test-pass' if test.status == 'PASS' else 'test-fail' }}">{{ test.status }}</div><div class="test-details"><div class="test-title-row"><h3>{{ test.name }}</h3><span class="test-tag">ISOLATED DB</span></div><p>{{ test.description }}</p><dl><div><dt>Expected result</dt><dd>{{ test.expected }}</dd></div><div><dt>Actual result</dt><dd>{{ test.actual }}</dd></div><div><dt>Security explanation</dt><dd>{{ test.explanation }}</dd></div></dl></div></article>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

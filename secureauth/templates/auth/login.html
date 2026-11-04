@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<section class="auth-layout">
+  <div class="auth-story">
+    <div class="eyebrow"><span class="eyebrow-line"></span> IDENTITY, PROTECTED</div>
+    <h1>Your secure space<br>starts <span class="text-gradient">here.</span></h1>
+    <p class="lead">Sign in to manage your account with confidence. Security that works quietly in the background.</p>
+    <div class="trust-row"><span class="trust-icon">⌑</span><span>Encrypted credentials</span><span class="trust-separator">·</span><span>Protected sessions</span></div>
+    <div class="auth-decoration" aria-hidden="true"><div class="ring ring-large"></div><div class="ring ring-small"></div><div class="orbit-dot"></div><div class="shield-glyph">◇</div></div>
+  </div>
+  <div class="glass-card auth-card">
+    <div class="card-kicker"><span class="kicker-icon">↗</span> WELCOME BACK</div>
+    <h2>Sign in</h2>
+    <p class="form-intro">Enter your credentials to continue.</p>
+    {% if expired %}<div class="inline-alert">Your session expired due to inactivity. Please sign in again.</div>{% endif %}
+    <form method="post" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label class="field-label" for="identity">Username or email</label>
+      <input class="input" type="text" name="identity" id="identity" autocomplete="username" maxlength="254" required autofocus>
+      <div class="field-heading"><label class="field-label" for="password">Password</label><a class="text-link" href="{{ url_for('auth.register') }}">Create account</a></div>
+      <div class="password-input">
+        <input class="input" type="password" name="password" id="password" autocomplete="current-password" maxlength="128" required>
+        <button class="reveal-button" type="button" data-toggle-password="password" aria-label="Show password">Show</button>
+      </div>
+      <label class="remember-option"><input type="checkbox" name="remember"> <span>Remember me on this device</span></label>
+      <div class="form-footnote"><span class="tiny-lock">⌑</span> Your password is never stored in plain text.</div>
+      <button class="button button-primary button-wide" type="submit">Sign in <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="auth-switch">New to SecureAuth? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}

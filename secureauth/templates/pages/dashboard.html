@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+<section class="dashboard">
+  <div class="page-heading">
+    <div><div class="eyebrow"><span class="eyebrow-line"></span> ACCOUNT OVERVIEW</div><h1>Good to see you, <span class="text-gradient">{{ user.full_name.split()[0] }}</span></h1><p class="lead compact">Your account is protected and ready.</p></div>
+    <div class="security-pill"><span class="status-pulse"></span> Account protected</div>
+  </div>
+  <div class="dashboard-grid">
+    <article class="glass-card profile-card">
+      <div class="card-topline"><span class="card-kicker">ACCOUNT DETAILS</span><span class="profile-avatar">{{ user.full_name[:1]|upper }}</span></div>
+      <h2>{{ user.full_name }}</h2><p class="muted">@{{ user.username }}</p>
+      <div class="detail-list">
+        <div><span>Email address</span><strong>{{ user.email }}</strong></div>
+        <div><span>Account role</span><strong>{{ user.role|title }}</strong></div>
+        <div><span>Member since</span><strong>{{ user.created_at[:10] }}</strong></div>
+        <div><span>Last sign in</span><strong>{{ user.last_login[:16].replace('T', ' ') ~ ' UTC' if user.last_login else 'First sign in' }}</strong></div>
+      </div>
+      <a class="text-link arrow-link" href="{{ url_for('pages.settings') }}">Manage account settings <span>→</span></a>
+    </article>
+    <article class="glass-card security-card">
+      <div class="card-kicker">SECURITY STATUS</div>
+      <div class="security-orb" aria-hidden="true"><span>✓</span></div>
+      <h2>You're in good hands.</h2><p class="muted">Your account uses layered protections to keep access secure.</p>
+      <div class="security-items"><div><span class="check-mark">✓</span> Password hashed with PBKDF2</div><div><span class="check-mark">✓</span> Session protected</div><div><span class="check-mark">✓</span> Login attempts monitored</div></div>
+    </article>
+  </div>
+  <div class="section-heading"><div><div class="eyebrow">TOOLS</div><h2>Account security</h2></div></div>
+  <div class="action-grid">
+    <a class="glass-card action-card" href="{{ url_for('pages.password_checker') }}"><span class="action-icon">⌁</span><span><strong>Password health check</strong><small>Evaluate a password without saving it.</small></span><span class="action-arrow">↗</span></a>
+    <a class="glass-card action-card" href="{{ url_for('pages.settings') }}"><span class="action-icon">⚙</span><span><strong>Account settings</strong><small>Update your credentials securely.</small></span><span class="action-arrow">↗</span></a>
+    {% if config.SECURITY_TESTING_ENABLED and config.ENVIRONMENT in ['development', 'testing'] %}<a class="glass-card action-card" href="{{ url_for('testing_center.security_center') }}"><span class="action-icon">⌬</span><span><strong>Security testing center</strong><small>Run controlled checks in an isolated database.</small></span><span class="action-arrow">↗</span></a>{% endif %}
+  </div>
+</section>
+{% endblock %}
